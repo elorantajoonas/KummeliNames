@@ -5,6 +5,8 @@ import random
 import re
 import sys
 
+import libraries.KummeliNamesLib as KummeliLib
+
 if __name__ == "__main__":
     # Declare command line arguments using argparse.
     parser = argparse.ArgumentParser()
@@ -19,7 +21,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Default name list. This will be overwritten if --input argument is used.
-    names_list = [['Matti', 'Näsä'], ['Sakari', 'Östermalm'], ['Pertti', 'Keinonen'], ['Mauno', 'Ahonen'], ['Pertti', 'Pasanen'], ['Harri', 'Soikkeli'], ['Esko', 'Mörkö'], ['Kalervo', 'Jankko'], ['Juha', 'Koistinen'], ['Eero', 'Kakko'], ['Ari', 'Zwang'], ['Patrik', 'Sjöberg'], ['Aas', 'Weckström'], ['Reino', 'Kinnula'], ['Rauno', 'Kinnula'], ['Markku', 'Lindell'], ['Martti', 'Meikäläinen'], ['Aimo', 'Nivaska'], ['B.B.', 'Korhonen'], ['Timo', 'Silakka'], ['Raimo', 'Vormisto'], ['Erik', 'Loka'], ['Rauno', 'Mäkynen'], ['Jaakko', 'Parantainen'], ['Hessu', 'Mälli'], ['JukkaEmil', 'Vanaja'], ['Volmari', 'Kuulapää'], ['Walton', 'Strömber'], ['Johan', 'Lind'], ['Iso', 'Pebe'], ['Pikku', 'Henry'], ['Arttu', 'Puukko'], ['Raimo', 'Helminen'], ['Mönkijä', 'Jätkä'], ['Kumi', 'Keijo'], ['Niko', 'Ström'], ['Roy Elvis', 'Jaatinen'], ['Carlos', 'Santana'], ['Pertti', 'Järvelä'], ['Pasi', 'Jaatinen'], ['Anssi', 'Suutarinen'], ['Maija', 'Karvinen'], ['Janne-Petteri', 'Broman'], ['Elmeri', 'Hautamäki'], ['Mr.', 'Beginning'], ['Jönssi', 'Kagelberg'], ['Dille', 'Kagelberg'], ['Kyrpä-Jooseppi', 'Hautamäki'], ['Pentti', 'Köyri'], ['Jari','Avanto'], ['Pasi', 'Veinä'], ['Seppo', 'Sillantaus'], ['Pertti', 'Mela']]
+    names_list = KummeliLib.getDefaultNamesList()
     
     # If input file is provided, read names and save them to names_list.
     if(args.input != ""):
@@ -50,42 +52,14 @@ if __name__ == "__main__":
     
     format = args.prefix +  format + args.suffix
     
-    # Initialize output list and increment variable.
-    i = 0
-    outputList = []
-    
-    # Get random names from input list.
-    while i < args.count:
-    
-    
-        # Input list doesn't contain anymore names. We can break the loop.
-        if len(names_list) == 0:
-            break
-            
-        # Get random name from list and save it to Output list
-        r = random.randint(0, len(names_list)-1)
-        try:
-            name = format.format(names_list[r][0],names_list[r][1])
-            outputList.append(name)
-            
-            # Remove picked name from list if allowduplicates flag was not provided.
-            if args.allowduplicates != True:
-                names_list.pop(r)
-            i += 1
-        
-        except:
-            error = "\n*********************\n"
-            error +="ERROR >:(\n"
-            error +="Parsing row: {0} failed!\n"
-            error +="Format was: {1}.\n"
-            error +="*********************\n"
-            print(error.format(names_list[r], args.format))
-            sys.exit(1)
+    outputList = KummeliLib.getNames(names_list=names_list, format=format, count=args.count, allowDuplicates=args.allowduplicates)
     
     # Print names if output filename was not provided. Otherwise write the results to file.
     if args.output == "":
         for name in outputList:
             print(name)
+    elif args.output == "azure":
+        sys.exit(outputList)
     else:
         with open(args.output, 'w') as output:
             for name in outputList:
