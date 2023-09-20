@@ -15,7 +15,6 @@ def getNames(names_list: any, format: str, count: int, allowDuplicates: any):
     # Get random names from input list.
     while i < count:
     
-    
         # Input list doesn't contain anymore names. We can break the loop.
         if len(names_list) == 0:
             break
@@ -93,8 +92,6 @@ if __name__ == "__main__":
     if args.output == "":
         for name in outputList:
             print(name)
-    elif args.output == "azure":
-        sys.exit(outputList)
     else:
         with open(args.output, 'w') as output:
             for name in outputList:
