@@ -1,6 +1,6 @@
 import logging
 import azure.functions as func
-import libraries.KummeliNamesLib as KummeliLib
+import KummeliNamesList as Kummeli
 import numbers
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -17,9 +17,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         count = int(countStr)
     
     try:
-        names_list = KummeliLib.getDefaultNamesList()
+        names_list = Kummeli.getDefaultNamesList()
 
-        result = KummeliLib.getNames(names_list=names_list, format="{0} {1}", count=count, allowDuplicates=None)
+        result = Kummeli.getNames(names_list=names_list, format="{0} {1}", count=count, allowDuplicates=None)
         resultStr = "\n".join(str(r) for r in result)
         return func.HttpResponse(resultStr)
     except:
